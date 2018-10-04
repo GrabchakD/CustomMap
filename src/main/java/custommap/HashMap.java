@@ -53,6 +53,7 @@ public class HashMap {
             if (keyArr[i] != 0) {
                 int newPosition = keyArr[i] & (newCapacity - 1);
                 newKeyArr[newPosition] = keyArr[i];
+                keyArr = newKeyArr;
             }
         }
     }
@@ -62,6 +63,7 @@ public class HashMap {
             if (keyArr[i] != 0) {
                 int newPosition = keyArr[i] & (newCapacity - 1);
                 newValueArr[newPosition] = valueArr[i];
+                valueArr = newValueArr;
             }
         }
     }
