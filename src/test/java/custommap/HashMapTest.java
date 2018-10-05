@@ -4,7 +4,7 @@ package custommap;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class HashMapTest {
 
@@ -16,14 +16,19 @@ public class HashMapTest {
     }
 
     @Test
-    public void putOneElement() {
+    public void testPutElement_happyPath() {
         int key = 1;
         long value = 1l;
         hashMap.put(key, value);
+
+        long expectedResult = 1l;
+        long actualResult = hashMap.get(1);
+
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    public void tryToResizeArray() {
+    public void testAddMoreKeysThenInitialCapacity() {
         hashMap.put(1, 1l);
         hashMap.put(2, 1l);
         hashMap.put(3, 1l);
@@ -46,16 +51,26 @@ public class HashMapTest {
         hashMap.put(20, 1l);
         hashMap.put(21, 1l);
         hashMap.put(22, 1l);
+
+        int expectedResult = 22;
+        long actualResult = hashMap.getSize();
+
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    public void tryToReplaceValueWhenWeAlreadyHaveKey() {
+    public void testPutSameKeyTwice() {
         hashMap.put(1, 1l);
         hashMap.put(1, 2l);
+
+        long expectedResult = 2l;
+        long actualResult = hashMap.get(1);
+
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    public void get() {
+    public void testGet_happyPath() {
         int key = 1;
         long value = 1l;
         hashMap.put(key, value);
@@ -67,7 +82,7 @@ public class HashMapTest {
     }
 
     @Test
-    public void getSize() {
+    public void testGetSize() {
         hashMap.put(1, 1l);
 
         int actualResult = hashMap.getSize();
