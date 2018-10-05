@@ -2,16 +2,14 @@ package custommap;
 
 public class HashMap {
 
-    private int key;
-    private long value;
     private int size = 0;
-    private int CAPACITY = 16;
-    private int[] keyArr = new int[CAPACITY];
-    private long[] valueArr = new long[CAPACITY];
+    private static final int DEFAULT_CAPACITY = 16;
+    private Integer[] keys = new Integer[DEFAULT_CAPACITY];
+    private long[] values = new long[DEFAULT_CAPACITY];
 
     public void put(int key, long value) {
-        if (size > keyArr.length/25) {
-            resize(CAPACITY);
+        if (size > keys.length/25) {
+            resize();
         }
 
         insertKeyAndValue(key, value);
@@ -19,7 +17,7 @@ public class HashMap {
 
     public long get(int key) {
         int position = searchKeyPosition(key);
-        return valueArr[position];
+        return values[position];
     }
 
     public int getSize() {
@@ -27,43 +25,51 @@ public class HashMap {
     }
 
     private void insertKeyAndValue(int key, long value) {
-        int position = key & (CAPACITY - 1);
+        int position = key & (DEFAULT_CAPACITY - 1);
 
-        keyArr[position] = key;
-        valueArr[position] = value;
+        while (checkPosition(position)) {
+            position++;
+        }
+
+        keys[position] = key;
+        values[position] = value;
         size++;
     }
 
+    private boolean checkPosition(int position) {
+        return keys[position] != null ? false : true;
+    }
+
     private int searchKeyPosition (int key) {
-        int position = key & (CAPACITY - 1);
+        int position = key & (DEFAULT_CAPACITY - 1);
 
-        return keyArr[position];
+        return keys[position];
     }
 
-    private void resize(int CAPACITY) {
-        int newCapacity = CAPACITY * 2;
-        int[] newKeyArr = new int[newCapacity];
-        long[] newValueArr = new long[newCapacity];
-        transferKey(newKeyArr, newCapacity);
-        transferValue(newValueArr, newCapacity);
+    private void resize() {
+        int newCapacity = keys.length * 2;
+        Integer[] newKeys = new Integer[newCapacity];
+        long[] newValues = new long[newCapacity];
+        transferKeys(newKeys);
+        transferValues(newValues);
     }
 
-    private void transferKey(int[] newKeyArr, int newCapacity) {
-        for (int i = 0; i < keyArr.length; i++) {
-            if (keyArr[i] != 0) {
-                int newPosition = keyArr[i] & (newCapacity - 1);
-                newKeyArr[newPosition] = keyArr[i];
-                keyArr = newKeyArr;
+    private void transferKeys(Integer[] newKeys) {
+        for (int i = 0; i < keys.length; i++) {
+            if (keys[i] != null) {
+                int newPosition = keys[i] & (newKeys.length - 1);
+                newKeys[newPosition] = keys[i];
+                keys = newKeys;
             }
         }
     }
 
-    private void transferValue(long[] newValueArr, int newCapacity) {
-        for (int i = 0; i < valueArr.length; i++) {
-            if (keyArr[i] != 0) {
-                int newPosition = keyArr[i] & (newCapacity - 1);
-                newValueArr[newPosition] = valueArr[i];
-                valueArr = newValueArr;
+    private void transferValues(long[] newValues) {
+        for (int i = 0; i < values.length; i++) {
+            if (keys[i] != null) {
+                int newPosition = keys[i] & (newValues.length - 1);
+                newValues[newPosition] = values[i];
+                values = newValues;
             }
         }
     }
