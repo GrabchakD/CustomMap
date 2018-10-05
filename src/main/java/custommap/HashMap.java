@@ -2,14 +2,16 @@ package custommap;
 
 public class HashMap {
 
-    private int size = 0;
     private static final int DEFAULT_CAPACITY = 16;
     private static final float LOAD_FACTOR = 0.75f;
+    private int size = 0;
     private Integer[] keys = new Integer[DEFAULT_CAPACITY];
     private long[] values = new long[DEFAULT_CAPACITY];
 
+
+
     public void put(int key, long value) {
-        if (size > keys.length/LOAD_FACTOR) {
+        if (size > keys.length * LOAD_FACTOR) {
             resize();
         }
 
@@ -28,7 +30,7 @@ public class HashMap {
     private void insertKeyAndValue(int key, long value) {
         int position = key & (DEFAULT_CAPACITY - 1);
 
-        while (checkPosition(position)) {
+        while (isPositionTaken(position)) {
             position++;
         }
 
@@ -37,14 +39,22 @@ public class HashMap {
         size++;
     }
 
-    private boolean checkPosition(int position) {
-        return keys[position] != null ? false : true;
+    private boolean isPositionTaken(int position) {
+        if (keys[position] != null) {
+            return true;
+        }
+
+        return false;
     }
 
     private int searchKeyPosition (int key) {
-        int position = key & (DEFAULT_CAPACITY - 1);
+        int position = calculatePosition(key);
 
         return keys[position];
+    }
+
+    private int calculatePosition(int key) {
+        return key & (keys.length - 1);
     }
 
     private void resize() {
