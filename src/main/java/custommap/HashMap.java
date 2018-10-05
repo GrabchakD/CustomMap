@@ -4,11 +4,12 @@ public class HashMap {
 
     private int size = 0;
     private static final int DEFAULT_CAPACITY = 16;
+    private static final float LOAD_FACTOR = 0.75f;
     private Integer[] keys = new Integer[DEFAULT_CAPACITY];
     private long[] values = new long[DEFAULT_CAPACITY];
 
     public void put(int key, long value) {
-        if (size > keys.length/25) {
+        if (size > keys.length/LOAD_FACTOR) {
             resize();
         }
 
